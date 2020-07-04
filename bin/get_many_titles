@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+
+$LOAD_PATH << File.dirname(__FILE__) + "/../lib"
+
+require 'title_map'
+require 'parallel'
+require 'csv'
+require 'pp'
+
+urls = File.readlines(ARGV[0]).map(&:chomp)
+
+map = TitleMap.new
+
+map.add(urls)
+
+map.url_map.each do |url, title|
+  puts [url, title].to_csv
+end

@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.dirname(__FILE__) + "/../lib"
+
+require 'twitter_thread_getter'
+require 'statistics_collator'
+require 'result_presenter'
+require 'csv'
+
+unless ARGV.size > 0
+  $stderr.puts "Usage: #{File.basename(__FILE__)} <tweet_id>"
+  $stderr.puts "This command will fetch a tweet id "
+  exit 1
+end
+
+logger = Logger.new($stderr)
+logger.info("Fetching tweets...")
+search_results = TwitterThreadGetter.new(ARGV[0]).get
+
+# logger.info("Got #{search_results.count} tweets...")
+
+s = StatisticsCollator.new(search_results)
+stats = s.collate
+
+puts ['URL','Title','Count', 'Recommended By'].to_csv
+stats.each do |url, data|
+  puts [url, data[:title], data[:count], data[:recommended_by]].to_csv
+end

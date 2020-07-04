@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.dirname(__FILE__) + "/../lib"
+
+require 'twitter_thread_getter'
+require 'result_presenter'
+require 'csv'
+
+search_results = TwitterThreadGetter.new(ARGV[0]).get
+
+
+puts "hered"
+search_results.each {|r| puts ResultPresenter.new(r).present }
